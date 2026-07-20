@@ -1,3 +1,61 @@
 <resources>
-    <string name="app_name">Project Aegis</string>
+    <string name="app_name">Aegis</string>
+
+    <!-- Auth -->
+    <string name="app_tagline">Secure Vault</string>
+    <string name="setup_title">Create your PIN</string>
+    <string name="setup_subtitle">This unlocks your vault on this device</string>
+    <string name="pin_hint">Enter PIN</string>
+    <string name="pin_confirm_hint">Confirm PIN</string>
+    <string name="action_set_pin">Create Vault</string>
+    <string name="unlock_title">Welcome back</string>
+    <string name="unlock_subtitle">Enter your PIN to unlock the vault</string>
+    <string name="action_unlock">Unlock</string>
+    <string name="action_use_biometric">Use Fingerprint</string>
+    <string name="error_pin_length">PIN must be 4–6 digits</string>
+    <string name="error_pin_mismatch">PINs don\'t match</string>
+    <string name="error_pin_incorrect">Incorrect PIN</string>
+    <string name="biometric_prompt_title">Unlock Aegis</string>
+    <string name="biometric_prompt_subtitle">Use your fingerprint to open the vault</string>
+
+    <!-- Vault dashboard -->
+    <string name="vault_title">Your Vault</string>
+    <string name="vault_empty_title">No credentials yet</string>
+    <string name="vault_empty_subtitle">Tap + to add your first account</string>
+    <string name="action_add_credential">Add credential</string>
+    <string name="action_lock">Lock vault</string>
+    <string name="action_change_pin">Change PIN</string>
+    <string name="action_copy_password">Copy password</string>
+    <string name="action_toggle_visibility">Show/hide password</string>
+    <string name="toast_copied">Password copied to clipboard</string>
+    <plurals name="vault_subtitle_count">
+        <item quantity="one">%d credential secured</item>
+        <item quantity="other">%d credentials secured</item>
+    </plurals>
+
+    <!-- Entry form -->
+    <string name="title_add_credential">Add Credential</string>
+    <string name="title_edit_credential">Edit Credential</string>
+    <string name="label_account_name">Account name</string>
+    <string name="label_url">Website URL (optional)</string>
+    <string name="label_username">Username / email</string>
+    <string name="label_password">Password</string>
+    <string name="action_save">Save</string>
+    <string name="error_required_field">Required</string>
+
+    <!-- Change PIN -->
+    <string name="title_change_pin">Change PIN</string>
+    <string name="label_current_pin">Current PIN</string>
+    <string name="label_new_pin">New PIN</string>
+    <string name="label_confirm_new_pin">Confirm new PIN</string>
+    <string name="action_save_pin">Save new PIN</string>
+    <string name="error_current_pin_incorrect">Current PIN is incorrect</string>
+    <string name="toast_pin_changed">PIN updated</string>
+
+    <!-- Detail -->
+    <string name="action_edit">Edit</string>
+    <string name="action_delete">Delete</string>
+    <string name="delete_confirm_title">Delete this credential?</string>
+    <string name="delete_confirm_message">This can\'t be undone.</string>
+    <string name="action_cancel">Cancel</string>
 </resources>

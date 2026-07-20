@@ -2,4 +2,23 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Aegis palette: deep navy vault + antique gold shield accent -->
+    <color name="aegis_bg">#0D1321</color>
+    <color name="aegis_surface">#161F33</color>
+    <color name="aegis_surface_alt">#1F2B45</color>
+    <color name="aegis_outline">#33405C</color>
+
+    <color name="aegis_gold">#D4AF37</color>
+    <color name="aegis_gold_dark">#A9841E</color>
+    <color name="aegis_gold_container">#3A311A</color>
+
+    <color name="aegis_teal">#3FC1C9</color>
+
+    <color name="aegis_on_bg">#EAEDF5</color>
+    <color name="aegis_on_bg_muted">#9AA6C3</color>
+    <color name="aegis_on_gold">#171204</color>
+
+    <color name="aegis_error">#E5484D</color>
+    <color name="aegis_success">#3FC97C</color>
 </resources>

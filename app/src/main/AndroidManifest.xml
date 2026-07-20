@@ -2,8 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+
+    <!--
+      INSECURE (v1, planted flaw): android:debuggable is hardcoded true here, which
+      forces the app to be debuggable even in a release build (JDWP attach, full
+      logcat, arbitrary code exec via a debugger). android:allowBackup="true" (the
+      Android Studio default) also lets `adb backup` pull the entire app-private
+      storage, including aegis_vault.db, off a rooted/USB-debuggable device.
+      Fix in v2: remove android:debuggable, set android:allowBackup="false".
+    -->
     <application
         android:allowBackup="true"
+        android:debuggable="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -21,6 +32,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!--
+          INSECURE (v1, planted flaw): none of these need to be exported since they're
+          only ever launched from within this app, but they're marked exported="true"
+          anyway. That lets any other app on the device start them directly via an
+          explicit Intent (e.g. jump straight to the vault or credential screens,
+          bypassing MainActivity's PIN/biometric gate). Fix in v2: android:exported="false".
+        -->
+        <activity
+            android:name=".VaultActivity"
+            android:exported="true"
+            android:label="@string/vault_title" />
+        <activity
+            android:name=".EntryFormActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".CredentialDetailActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ChangePinActivity"
+            android:exported="true" />
     </application>
 
 </manifest>
