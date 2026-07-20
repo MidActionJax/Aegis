@@ -50,7 +50,7 @@ Aegis stores accounts, usernames, URLs, and passwords behind a PIN/biometric gat
 | Release | Description | Link |
 |---|---|---|
 | `v1.0-insecure` | Fully working app with 6 deliberately planted security flaws | [Release](https://github.com/MidActionJax/Aegis/releases/tag/v1.0-insecure) · [PR #1](https://github.com/MidActionJax/Aegis/pull/1) |
-| `v2.0-secure` | Same app, all 6 flaws fixed, re-scanned with MobSF | *(coming up)* |
+| `v2.0-secure` | Same app, all 6 flaws fixed, re-scanned with MobSF | [Release](https://github.com/MidActionJax/Aegis/releases/tag/v2.0-secure) · [PR #2](https://github.com/MidActionJax/Aegis/pull/2) |
 
 Each release has the installable APK and the full MobSF report attached as assets.
 
