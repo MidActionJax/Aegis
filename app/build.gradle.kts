@@ -40,6 +40,8 @@ dependencies {
     implementation(libs.material)
     implementation(libs.biometric)
     implementation(libs.recyclerview)
+    implementation(libs.sqlcipher)
+    implementation(libs.androidx.sqlite)
     testImplementation(libs.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.ext.junit)

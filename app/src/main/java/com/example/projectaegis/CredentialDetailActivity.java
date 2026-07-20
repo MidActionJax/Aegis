@@ -1,26 +1,24 @@
 package com.example.projectaegis;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.projectaegis.data.Credential;
 import com.example.projectaegis.data.VaultRepository;
+import com.example.projectaegis.util.ClipboardUtil;
 import com.google.android.material.appbar.MaterialToolbar;
 
-public class CredentialDetailActivity extends AppCompatActivity {
+public class CredentialDetailActivity extends SecureActivity {
 
-    private static final String TAG = "CredentialDetail";
+    private final Handler clipboardHandler = new Handler(Looper.getMainLooper());
 
     private VaultRepository repository;
     private Credential credential;
@@ -49,6 +47,12 @@ public class CredentialDetailActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         loadCredential();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        clipboardHandler.removeCallbacksAndMessages(null);
     }
 
     private void loadCredential() {
@@ -92,13 +96,7 @@ public class CredentialDetailActivity extends AppCompatActivity {
     }
 
     private void copyPassword() {
-        // INSECURE (v1, planted flaw): same unbounded clipboard copy + sensitive
-        // logging as the vault dashboard. Fix in v2 alongside VaultActivity.onCopyPassword.
-        Log.d(TAG, "Copied password for " + credential.getAccountName() + ": " + credential.getPassword());
-
-        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("password", credential.getPassword());
-        clipboard.setPrimaryClip(clip);
+        ClipboardUtil.copyWithAutoWipe(this, clipboardHandler, "password", credential.getPassword());
         Toast.makeText(this, R.string.toast_copied, Toast.LENGTH_SHORT).show();
     }
 

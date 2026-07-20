@@ -3,13 +3,13 @@ package com.example.projectaegis.data;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 
-// INSECURE (v1, planted flaw): plain SQLiteOpenHelper, not SQLCipher.
-// The database file at /data/data/com.example.projectaegis/databases/aegis_vault.db
-// is stored on disk with passwords in cleartext. Fix in v2: swap this for a
-// SQLCipher-backed SQLiteOpenHelper keyed from Android Keystore.
+import net.zetetic.database.sqlcipher.SQLiteDatabase;
+import net.zetetic.database.sqlcipher.SQLiteOpenHelper;
+
+// SECURE (v2): backed by SQLCipher instead of plain SQLite. The database file on disk
+// is encrypted with the 256-bit key VaultKeyProvider hands VaultRepository at open time;
+// without it, the file is unreadable ciphertext (fixes the v1 plaintext-storage flaw).
 public class VaultDbHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "aegis_vault.db";
@@ -23,8 +23,9 @@ public class VaultDbHelper extends SQLiteOpenHelper {
     static final String COL_PASSWORD = "password";
     static final String COL_UPDATED_AT = "updated_at";
 
-    public VaultDbHelper(Context context) {
-        super(context.getApplicationContext(), DB_NAME, null, DB_VERSION);
+    public VaultDbHelper(Context context, byte[] password) {
+        super(context.getApplicationContext(), DB_NAME, password, null, DB_VERSION,
+                0, null, null, false);
     }
 
     @Override

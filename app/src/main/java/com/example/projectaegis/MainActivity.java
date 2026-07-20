@@ -2,14 +2,12 @@ package com.example.projectaegis;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
@@ -22,9 +20,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.concurrent.Executor;
 
-public class MainActivity extends AppCompatActivity {
-
-    private static final String TAG = "MainActivity";
+public class MainActivity extends SecureActivity {
 
     private PinManager pinManager;
 
@@ -101,17 +97,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleUnlock() {
-        String pin = textOf(unlockPinInput);
-        // INSECURE (v1, planted flaw): logs the raw PIN attempt to Logcat.
-        // Fix in v2: remove this log line entirely.
-        Log.d(TAG, "Attempting vault unlock with PIN: " + pin);
+        if (pinManager.isLockedOut()) {
+            showLockoutError();
+            return;
+        }
 
+        String pin = textOf(unlockPinInput);
         if (pinManager.checkPin(pin)) {
             unlockError.setVisibility(View.GONE);
             goToVault();
+        } else if (pinManager.isLockedOut()) {
+            showLockoutError();
         } else {
             showError(unlockError, getString(R.string.error_pin_incorrect));
         }
+    }
+
+    private void showLockoutError() {
+        showError(unlockError, getString(R.string.error_locked_out, pinManager.getLockoutRemainingSeconds()));
     }
 
     private void setUpBiometricButton() {
