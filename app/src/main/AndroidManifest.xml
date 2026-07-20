@@ -5,16 +5,13 @@
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
 
     <!--
-      INSECURE (v1, planted flaw): android:debuggable is hardcoded true here, which
-      forces the app to be debuggable even in a release build (JDWP attach, full
-      logcat, arbitrary code exec via a debugger). android:allowBackup="true" (the
-      Android Studio default) also lets `adb backup` pull the entire app-private
-      storage, including aegis_vault.db, off a rooted/USB-debuggable device.
-      Fix in v2: remove android:debuggable, set android:allowBackup="false".
+      SECURE (v2): android:debuggable is no longer hardcoded (AGP sets it per build
+      type automatically - false in release, true in debug - instead of always true),
+      and android:allowBackup is now false so `adb backup`/auto-backup can no longer
+      pull aegis_vault.db or auth_prefs off the device. Fixes the v1 manifest flaws.
     -->
     <application
-        android:allowBackup="true"
-        android:debuggable="true"
+        android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -34,26 +31,26 @@
         </activity>
 
         <!--
-          INSECURE (v1, planted flaw): none of these need to be exported since they're
-          only ever launched from within this app, but they're marked exported="true"
-          anyway. That lets any other app on the device start them directly via an
-          explicit Intent (e.g. jump straight to the vault or credential screens,
-          bypassing MainActivity's PIN/biometric gate). Fix in v2: android:exported="false".
+          SECURE (v2): these are only ever launched from within this app via explicit
+          Intents, so they no longer need android:exported="true". Setting it false
+          fixes the v1 flaw where any other app on the device could start them
+          directly (e.g. jump straight to the vault, bypassing MainActivity's PIN/
+          biometric gate).
         -->
         <activity
             android:name=".VaultActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="@string/vault_title" />
         <activity
             android:name=".EntryFormActivity"
-            android:exported="true"
+            android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".CredentialDetailActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".ChangePinActivity"
-            android:exported="true" />
+            android:exported="false" />
     </application>
 
 </manifest>

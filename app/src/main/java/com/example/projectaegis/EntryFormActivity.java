@@ -3,8 +3,6 @@ package com.example.projectaegis;
 import android.os.Bundle;
 import android.text.TextUtils;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.projectaegis.data.Credential;
 import com.example.projectaegis.data.VaultRepository;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -12,7 +10,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-public class EntryFormActivity extends AppCompatActivity {
+public class EntryFormActivity extends SecureActivity {
 
     private VaultRepository repository;
     private Long editingId;

@@ -1,34 +1,29 @@
 package com.example.projectaegis;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.projectaegis.data.Credential;
 import com.example.projectaegis.data.VaultRepository;
+import com.example.projectaegis.util.ClipboardUtil;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.List;
 
-// NOTE (v1, planted flaw): this Activity never sets FLAG_SECURE, so revealed
-// passwords are visible in the Recents app-switcher thumbnail and in screenshots.
-// Fix in v2: getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, ...) in onCreate.
-public class VaultActivity extends AppCompatActivity implements CredentialAdapter.Listener {
-
-    private static final String TAG = "VaultActivity";
+public class VaultActivity extends SecureActivity implements CredentialAdapter.Listener {
 
     public static final String EXTRA_CREDENTIAL_ID = "credential_id";
+
+    private final Handler clipboardHandler = new Handler(Looper.getMainLooper());
 
     private VaultRepository repository;
     private CredentialAdapter adapter;
@@ -62,6 +57,12 @@ public class VaultActivity extends AppCompatActivity implements CredentialAdapte
         refreshList();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        clipboardHandler.removeCallbacksAndMessages(null);
+    }
+
     private void refreshList() {
         List<Credential> credentials = repository.getAll();
         adapter.submitList(credentials);
@@ -91,14 +92,7 @@ public class VaultActivity extends AppCompatActivity implements CredentialAdapte
 
     @Override
     public void onCopyPassword(Credential credential) {
-        // INSECURE (v1, planted flaw): copies the password with no expiry/auto-clear,
-        // and logs the plaintext value. Fix in v2: schedule a 30s clipboard wipe and
-        // drop the log line.
-        Log.d(TAG, "Copied password for " + credential.getAccountName() + ": " + credential.getPassword());
-
-        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("password", credential.getPassword());
-        clipboard.setPrimaryClip(clip);
+        ClipboardUtil.copyWithAutoWipe(this, clipboardHandler, "password", credential.getPassword());
         Toast.makeText(this, R.string.toast_copied, Toast.LENGTH_SHORT).show();
     }
 }

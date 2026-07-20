@@ -3,19 +3,32 @@ package com.example.projectaegis.data;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+
+import com.example.projectaegis.security.VaultKeyProvider;
+
+import net.zetetic.database.sqlcipher.SQLiteDatabase;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class VaultRepository {
 
     private static volatile VaultRepository instance;
 
-    private final VaultDbHelper dbHelper;
+    private final SQLiteDatabase database;
 
     private VaultRepository(Context context) {
-        this.dbHelper = new VaultDbHelper(context);
+        Context appContext = context.getApplicationContext();
+        System.loadLibrary("sqlcipher");
+
+        byte[] rawKey = VaultKeyProvider.getOrCreateRawKey(appContext);
+        try {
+            VaultDbHelper dbHelper = new VaultDbHelper(appContext, rawKey);
+            this.database = dbHelper.getWritableDatabase();
+        } finally {
+            Arrays.fill(rawKey, (byte) 0);
+        }
     }
 
     public static VaultRepository getInstance(Context context) {
@@ -30,25 +43,21 @@ public class VaultRepository {
     }
 
     public long insert(String accountName, String url, String username, String password) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = VaultDbHelper.toValues(accountName, url, username, password, System.currentTimeMillis());
-        return db.insert(VaultDbHelper.TABLE, null, values);
+        return database.insert(VaultDbHelper.TABLE, null, values);
     }
 
     public void update(long id, String accountName, String url, String username, String password) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = VaultDbHelper.toValues(accountName, url, username, password, System.currentTimeMillis());
-        db.update(VaultDbHelper.TABLE, values, VaultDbHelper.COL_ID + "=?", new String[]{String.valueOf(id)});
+        database.update(VaultDbHelper.TABLE, values, VaultDbHelper.COL_ID + "=?", new String[]{String.valueOf(id)});
     }
 
     public void delete(long id) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.delete(VaultDbHelper.TABLE, VaultDbHelper.COL_ID + "=?", new String[]{String.valueOf(id)});
+        database.delete(VaultDbHelper.TABLE, VaultDbHelper.COL_ID + "=?", new String[]{String.valueOf(id)});
     }
 
     public Credential getById(long id) {
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        try (Cursor cursor = db.query(VaultDbHelper.TABLE, null, VaultDbHelper.COL_ID + "=?",
+        try (Cursor cursor = database.query(VaultDbHelper.TABLE, null, VaultDbHelper.COL_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null)) {
             if (cursor.moveToFirst()) {
                 return VaultDbHelper.fromCursor(cursor);
@@ -59,8 +68,7 @@ public class VaultRepository {
 
     public List<Credential> getAll() {
         List<Credential> results = new ArrayList<>();
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        try (Cursor cursor = db.query(VaultDbHelper.TABLE, null, null, null, null, null,
+        try (Cursor cursor = database.query(VaultDbHelper.TABLE, null, null, null, null, null,
                 VaultDbHelper.COL_ACCOUNT_NAME + " COLLATE NOCASE ASC")) {
             while (cursor.moveToNext()) {
                 results.add(VaultDbHelper.fromCursor(cursor));

@@ -3,15 +3,13 @@ package com.example.projectaegis;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.projectaegis.auth.PinManager;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-public class ChangePinActivity extends AppCompatActivity {
+public class ChangePinActivity extends SecureActivity {
 
     private PinManager pinManager;
 
@@ -52,6 +50,10 @@ public class ChangePinActivity extends AppCompatActivity {
         newPinLayout.setError(null);
         confirmNewPinLayout.setError(null);
 
+        if (pinManager.isLockedOut()) {
+            currentPinLayout.setError(getString(R.string.error_locked_out, pinManager.getLockoutRemainingSeconds()));
+            return;
+        }
         if (!pinManager.checkPin(currentPin)) {
             currentPinLayout.setError(getString(R.string.error_current_pin_incorrect));
             return;

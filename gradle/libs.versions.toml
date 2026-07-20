@@ -9,6 +9,8 @@ activityKtx = "1.13.0"
 constraintlayout = "2.2.1"
 biometric = "1.1.0"
 recyclerview = "1.4.0"
+sqlcipher = "4.9.0"
+androidxSqlite = "2.4.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -20,6 +22,8 @@ activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 biometric = { group = "androidx.biometric", name = "biometric", version.ref = "biometric" }
 recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
+sqlcipher = { group = "net.zetetic", name = "sqlcipher-android", version.ref = "sqlcipher" }
+androidx-sqlite = { group = "androidx.sqlite", name = "sqlite", version.ref = "androidxSqlite" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
