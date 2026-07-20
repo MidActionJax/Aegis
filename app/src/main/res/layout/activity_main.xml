@@ -5,15 +5,210 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/aegis_bg"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginTop="48dp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/ic_shield"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/appTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:letterSpacing="0.12"
+        android:text="@string/app_name"
+        android:textAllCaps="true"
+        android:textColor="@color/aegis_on_bg"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/logo" />
+
+    <TextView
+        android:id="@+id/appTagline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/app_tagline"
+        android:textColor="@color/aegis_on_bg_muted"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appTitle" />
+
+    <!-- ===== First-run PIN setup group ===== -->
+    <LinearLayout
+        android:id="@+id/setupGroup"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appTagline"
+        app:layout_constraintWidth_percent="0.85"
+        tools:visibility="visible">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="@string/setup_title"
+            android:textColor="@color/aegis_on_bg"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="24dp"
+            android:text="@string/setup_subtitle"
+            android:textColor="@color/aegis_on_bg_muted"
+            android:textSize="13sp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/setupPinLayout"
+            style="@style/Aegis.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/pin_hint">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/setupPinInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberPassword"
+                android:maxLength="6"
+                android:textColor="@color/aegis_on_bg" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/setupPinConfirmLayout"
+            style="@style/Aegis.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="@string/pin_confirm_hint">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/setupPinConfirmInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberPassword"
+                android:maxLength="6"
+                android:textColor="@color/aegis_on_bg" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/setupError"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/aegis_error"
+            android:textSize="13sp"
+            android:visibility="gone"
+            tools:text="@string/error_pin_mismatch"
+            tools:visibility="visible" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/setupButton"
+            style="@style/Aegis.Button.Primary"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/action_set_pin"
+            android:textAllCaps="false"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- ===== Returning user unlock group ===== -->
+    <LinearLayout
+        android:id="@+id/unlockGroup"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appTagline"
+        app:layout_constraintWidth_percent="0.85">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="@string/unlock_title"
+            android:textColor="@color/aegis_on_bg"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="24dp"
+            android:text="@string/unlock_subtitle"
+            android:textColor="@color/aegis_on_bg_muted"
+            android:textSize="13sp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/unlockPinLayout"
+            style="@style/Aegis.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/pin_hint">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/unlockPinInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberPassword"
+                android:maxLength="6"
+                android:textColor="@color/aegis_on_bg" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/unlockError"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/aegis_error"
+            android:textSize="13sp"
+            android:visibility="gone"
+            tools:text="@string/error_pin_incorrect"
+            tools:visibility="visible" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/unlockButton"
+            style="@style/Aegis.Button.Primary"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/action_unlock"
+            android:textAllCaps="false"
+            android:textStyle="bold" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/biometricButton"
+            style="@style/Widget.Material3.Button.TonalButton.Icon"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/action_use_biometric"
+            android:textAllCaps="false"
+            app:icon="@drawable/ic_fingerprint"
+            app:iconTint="@color/aegis_teal" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
